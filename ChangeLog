@@ -1,3 +1,11 @@
+commit c66f4f9fcc7450f2c1378f6117bda4442d2af8ae
+Author: Peter Hutterer <peter.hutterer@who-t.net>
+Date:   Wed Oct 7 10:53:14 2009 +1000
+
+    keyboard 1.4.0
+    
+    Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
+
 commit 0c75afb4895b60aa08209ccfee9dfad4e4495f4d
 Author: Peter Hutterer <peter.hutterer@who-t.net>
 Date:   Tue Oct 6 17:02:33 2009 +1000

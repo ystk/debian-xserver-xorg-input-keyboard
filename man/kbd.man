@@ -1,5 +1,3 @@
-.\" $XdotOrg: $
-.\" $XFree86: xc/programs/Xserver/hw/xfree86/input/keyboard/keyboard.man,v 1.2 2001/01/27 18:20:57 dawes Exp $ 
 .\" shorthand for double quote that works everywhere.
 .ds q \N'34'
 .TH KBD __drivermansuffix__ __vendorversion__
@@ -24,13 +22,13 @@ driver formerly included in __xservername__.
 .PP
 The
 .B kbd
-driver functions as a keyboard input device, and may be used as the
-X server's core keyboard.
+driver functions as a keyboard input device.
 .SH CONFIGURATION DETAILS
 .PP
 Depending on the X server version in use, input device options may be set
-in either a __xconfigfile__ file, or in the configuration files read by the
-Hardware Abstraction Layer (HAL) daemon, hald(1).
+in either a __xconfigfile__ file, an xorg.conf.d snippet, or in the
+configuration files read by the Hardware Abstraction Layer (HAL) daemon,
+hald(1).
 .PP
 Please refer to __xconfigfile__(__filemansuffix__) for general configuration
 details and for options that can be used with all input drivers.  This
@@ -42,7 +40,7 @@ are supported:
 .TP 7
 .BI "Option \*qDevice\*q \*q" string \*q
 Specify the keyboard device.  Default: the OS's default console keyboard
-input source.
+input source.  Property: "Device Node" (read-only).
 .TP 7
 .BI "Option \*qProtocol\*q \*q" string \*q
 Specify the keyboard protocol.  Valid protocol types include:
@@ -69,21 +67,19 @@ specifies which XKB rules file to use for interpreting the
 .BR XkbVariant ,
 and
 .B XkbOptions
-settings.  Default: "xorg" for most platforms, but "xfree98" for the
-Japanese PC-98 platforms. If you use the "xorg" value then you can
+settings.  Default: "base" for most platforms.
+If you use the "base" value then you can
 find listing of all valid values for these four options in the
 .I
-__xkb_path__/rules/xorg.lst
+__xkb_path__/rules/base.lst
 file.
 .TP 7
 .BI "Option \*qXkbModel\*q \*q" modelname \*q
-specifies the XKB keyboard model name.  Default: "pc105" for most platforms,
-but "pc98" for the Japanese PC-98 platforms.
+specifies the XKB keyboard model name.  Default: "pc105" for most platforms.
 .TP 7
 .BI "Option \*qXkbLayout\*q \*q" layoutname \*q
 specifies the XKB keyboard layout name.  This is usually the country or
-language type of the keyboard.  Default: "us" for most platforms, but
-"jp" for the Japanese PC-98 platforms.
+language type of the keyboard.  Default: "us" for most platforms.
 .TP 7
 .BI "Option \*qXkbVariant\*q \*q" variants \*q
 specifies the XKB keyboard variant components.  These can be used to
@@ -93,15 +89,15 @@ enhance the keyboard layout details.  Default: not set.
 specifies the XKB keyboard option components.  These can be used to
 enhance the keyboard behaviour.  Default: not set.
 .PP
-Some other XKB-related options are available, but they are incompatible
-with the ones listed above and are not recommended, so they are not
-documented here.
+For a list of available XKB options, see
+.B xkeyboard-config(__miscmansuffix__).
 .SH EXAMPLE
 The following xorg.conf fragment ensures that user will be able to switch between
 .I us
 and
 .I sk
-layouts by pressing the "menu" key.
+layouts by pressing the "menu" key. The scroll lock LED shows which layout
+is currently active.
 .PP
 The
 .B XkbVariant
@@ -122,7 +118,7 @@ Section \*qInputDevice\*q
 Identifier   "Generic Keyboard"
 Driver       "kbd"
 Option       "CoreKeyboard"
-Option       "XkbRules"      "xorg"
+Option       "XkbRules"      "base"
 Option       "XkbModel"      "pc105"
 Option       "XkbLayout"     "us,sk"
 Option       "XkbVariant"    ",qwerty"
@@ -136,3 +132,5 @@ __xservername__(__appmansuffix__), __xconfigfile__(__filemansuffix__),
 Xserver(__appmansuffix__), X(__miscmansuffix__).
 
 hal(__miscmansuffix__), hald(__adminmansuffix__), fdi(__filemansuffix__).
+
+xkeyboard-config(__miscmansuffix__).

@@ -29,6 +29,10 @@
 
 #include "xf86Xinput.h"
 
+#if GET_ABI_MAJOR(ABI_XINPUT_VERSION) < 18
+#define LogMessageVerbSigSafe xf86MsgVerb
+#endif
+
 Bool ATScancode(InputInfoPtr pInfo, int *scanCode);
 
 /* Public interface to OS-specific keyboard support. */
@@ -40,7 +44,6 @@ typedef	void	(*BellProc)(InputInfoPtr pInfo,
                             int loudness, int pitch, int duration);
 typedef	void	(*SetLedsProc)(InputInfoPtr pInfo, int leds);
 typedef	int	(*GetLedsProc)(InputInfoPtr pInfo);
-typedef	void	(*SetKbdRepeatProc)(InputInfoPtr pInfo, char rad);
 typedef	void	(*KbdGetMappingProc)(InputInfoPtr pInfo,
                                      KeySymsPtr pKeySyms, CARD8* pModMap);
 typedef	int	(*RemapScanCodeProc)(InputInfoPtr pInfo, int *scanCode);
@@ -60,20 +63,16 @@ typedef struct {
     BellProc		Bell;
     SetLedsProc		SetLeds;
     GetLedsProc		GetLeds;
-    SetKbdRepeatProc	SetKbdRepeat;
     KbdGetMappingProc	KbdGetMapping;
     RemapScanCodeProc	RemapScanCode;
 
     OpenKeyboardProc	OpenKeyboard;
     PostEventProc	PostEvent;
 
-    int			bell_pitch;
-    int			bell_duration;
     unsigned long	leds;
     unsigned long	xledsMask;
     unsigned long	keyLeds;
     int			scanPrefix;
-    Bool		vtSwitchSupported;
     Bool		CustomKeycodes;
     Bool		isConsole;
     TransMapPtr         scancodeMap;
@@ -81,17 +80,15 @@ typedef struct {
 
     /* os specific */
     pointer		private;
-    int			kbdType;
     int			consType;
     int			wsKbdType;
+    char		wsKbdDev[256];
 
 } KbdDevRec, *KbdDevPtr;
 
 typedef enum {
     PROT_STD,
-    PROT_XQUEUE,
     PROT_WSCONS,
-    PROT_USB,
     PROT_UNKNOWN_KBD
 } KbdProtocolId;
 
@@ -101,21 +98,3 @@ typedef struct {
 } KbdProtocolRec;
 
 Bool xf86OSKbdPreInit(InputInfoPtr pInfo);
-
-/* Adjust this when the kbd interface changes. */
-
-/*
- * History:
- *
- *  1.0.0 - Initial version.
- */
-
-#define OS_KBD_VERSION_MAJOR 1
-#define OS_KBD_VERSION_MINOR 0
-#define OS_KBD_VERSION_PATCH 0
-
-#define OS_KBD_VERSION_CURRENT						\
-	BUILTIN_INTERFACE_VERSION_NUMERIC(OS_KBD_VERSION_MAJOR,		\
-					  OS_KBD_VERSION_MINOR,		\
-					  OS_KBD_VERSION_PATCH)
-
